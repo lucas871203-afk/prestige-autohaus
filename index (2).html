@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Autohaus Prestige – Exklusive Fahrzeuge</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--gold:#c9a45c;--gold2:#e8cf96;--bg:#0b0b0e;--karte:rgba(255,255,255,.035);--linie:rgba(201,164,92,.22)}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:#e9e6df;min-height:100vh;
+  background:
+    radial-gradient(ellipse 80% 50% at 15% -10%,rgba(201,164,92,.18),transparent 60%),
+    radial-gradient(ellipse 60% 40% at 100% 30%,rgba(120,90,40,.12),transparent 60%),
+    linear-gradient(180deg,#0e0e12 0%,#08080a 100%);
+  background-attachment:fixed;
+}
+body::before{ /* feine Struktur im Hintergrund */
+  content:"";position:fixed;inset:0;pointer-events:none;opacity:.05;z-index:-1;
+  background-image:repeating-linear-gradient(45deg,#fff 0 1px,transparent 1px 14px);
+}
+.serif{font-family:Georgia,"Times New Roman",serif}
+
+/* Header */
+header{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;
+  padding:18px 6vw;background:rgba(10,10,13,.75);backdrop-filter:blur(12px);border-bottom:1px solid var(--linie)}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none;color:#fff}
+.logo svg{width:38px;height:38px}
+.logo b{font-family:Georgia,serif;font-size:22px;letter-spacing:5px;font-weight:normal}
+.logo small{display:block;font-size:10px;letter-spacing:4px;color:var(--gold);margin-top:2px}
+nav a{color:#bdb6a8;text-decoration:none;font-size:13px;letter-spacing:2px;text-transform:uppercase;margin-left:28px}
+nav a:hover{color:var(--gold2)}
+
+/* Hero */
+.hero{position:relative;padding:90px 6vw 70px;overflow:hidden;border-bottom:1px solid var(--linie)}
+.hero .eyebrow{color:var(--gold);letter-spacing:6px;font-size:12px;text-transform:uppercase}
+.hero h1{font-family:Georgia,serif;font-weight:normal;font-size:clamp(34px,5.5vw,64px);line-height:1.1;margin:18px 0;max-width:720px}
+.hero h1 em{color:var(--gold2);font-style:italic}
+.hero p{color:#a9a294;max-width:520px;line-height:1.7}
+.hero .silhouette{position:absolute;right:-4vw;bottom:-10px;width:min(620px,60vw);opacity:.16;pointer-events:none}
+
+/* Leiste */
+.leiste{max-width:1180px;margin:40px auto 0;padding:0 24px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.leiste h2{font-family:Georgia,serif;font-weight:normal;font-size:28px;margin-right:auto}
+.leiste h2 span{color:var(--gold);font-size:15px;font-family:inherit;margin-left:10px;letter-spacing:1px}
+.feld{padding:11px 14px;border:1px solid #2c2a26;border-radius:4px;background:rgba(0,0,0,.4);color:#eee;font-size:14px;outline:none}
+.feld:focus{border-color:var(--gold)}
+.leiste input{min-width:230px}
+
+/* Fahrzeugliste */
+main{max-width:1180px;margin:24px auto 80px;padding:0 24px}
+.liste{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:26px}
+.karte{background:var(--karte);border:1px solid rgba(255,255,255,.07);border-radius:6px;overflow:hidden;transition:.35s;position:relative}
+.karte:hover{border-color:var(--linie);transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,.5),0 0 0 1px rgba(201,164,92,.1)}
+.bildbox{aspect-ratio:16/10;overflow:hidden;background:#141416}
+.bildbox img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.karte:hover .bildbox img{transform:scale(1.05)}
+.info{padding:20px 22px 22px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px;border-top:1px solid var(--linie)}
+.name{font-size:18px;color:#fff;line-height:1.35}
+.preis{text-align:right;white-space:nowrap}
+.preis b{display:block;font-family:Georgia,serif;font-size:24px;color:var(--gold2);font-weight:normal}
+.preis small{font-size:11px;color:#7d776c;letter-spacing:1px}
+.leer{grid-column:1/-1;text-align:center;padding:80px 20px;color:#7d776c;border:1px dashed #2c2a26;border-radius:6px}
+
+footer{border-top:1px solid var(--linie);padding:36px 6vw;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:#6d675d;font-size:13px}
+
+/* Buttons */
+.btn{background:linear-gradient(135deg,var(--gold),#a8843f);color:#111;border:none;padding:11px 20px;border-radius:4px;font-weight:600;cursor:pointer;font-size:14px;letter-spacing:.5px}
+.btn:hover{filter:brightness(1.12)}
+.btn.zweit{background:transparent;color:var(--gold2);border:1px solid var(--linie)}
+.btn.klein{padding:6px 12px;font-size:12px}
+.btn.rot{background:transparent;color:#e57373;border:1px solid rgba(229,115,115,.4)}
+.btn.rot:hover{background:rgba(229,115,115,.12)}
+
+/* Overlays */
+.overlay{position:fixed;inset:0;z-index:200;background:rgba(5,5,7,.9);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:16px}
+.overlay.offen{display:flex}
+.login{width:100%;max-width:360px;background:#121215;border:1px solid var(--linie);border-radius:8px;padding:34px;text-align:center}
+.login svg{width:44px;height:44px;margin-bottom:12px}
+.login h3{font-family:Georgia,serif;font-weight:normal;font-size:24px;margin-bottom:6px}
+.login p{color:#8a8478;font-size:13px;margin-bottom:20px}
+.login input{width:100%;margin-bottom:12px;text-align:center;letter-spacing:3px}
+.fehler{color:#e57373;font-size:13px;min-height:18px;margin-bottom:8px}
+.schuetteln{animation:sh .4s}
+@keyframes sh{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+
+/* Admin-Bereich */
+#admin{align-items:stretch;padding:0}
+.admin-wrap{width:100%;max-width:1100px;margin:auto;background:#101013;border:1px solid var(--linie);border-radius:8px;max-height:94vh;display:flex;flex-direction:column;overflow:hidden}
+.admin-kopf{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid var(--linie);gap:10px;flex-wrap:wrap}
+.admin-kopf h3{font-family:Georgia,serif;font-weight:normal;font-size:22px}
+.admin-kopf h3 span{color:var(--gold);font-size:12px;letter-spacing:3px;display:block;font-family:inherit;text-transform:uppercase}
+.admin-body{display:grid;grid-template-columns:380px 1fr;overflow:hidden;flex:1}
+.formular{padding:24px;border-right:1px solid var(--linie);overflow:auto}
+.formular h4,.bestand h4{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+.formular label{display:block;font-size:13px;color:#a9a294;margin:14px 0 6px}
+.formular .feld{width:100%}
+.upload{border:1px dashed #3a372f;border-radius:6px;padding:18px;text-align:center;cursor:pointer;color:#8a8478;font-size:13px;transition:.2s}
+.upload:hover,.upload.drag{border-color:var(--gold);color:var(--gold2)}
+.upload img{display:none;width:100%;border-radius:4px;margin-top:10px;aspect-ratio:16/10;object-fit:cover}
+.formular .knoepfe{display:flex;gap:10px;margin-top:22px}
+.formular .knoepfe .btn{flex:1}
+.bestand{padding:24px;overflow:auto}
+.zeile{display:flex;align-items:center;gap:14px;padding:10px;border:1px solid rgba(255,255,255,.06);border-radius:6px;margin-bottom:10px;background:rgba(255,255,255,.02)}
+.zeile img{width:96px;height:60px;object-fit:cover;border-radius:4px;flex-shrink:0}
+.zeile .t{flex:1;min-width:0}
+.zeile .t div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.zeile .t small{color:var(--gold2)}
+.zeile .a{display:flex;gap:6px}
+.hinweis{font-size:12px;color:#6d675d;margin-top:18px;line-height:1.6}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:#1a1914;border:1px solid var(--gold);color:var(--gold2);padding:12px 22px;border-radius:4px;z-index:300;transition:.35s;font-size:14px}
+.toast.zeigen{transform:translateX(-50%) translateY(0)}
+
+@media(max-width:820px){
+  nav{display:none}
+  .admin-body{grid-template-columns:1fr;overflow:auto}
+  .formular{border-right:none;border-bottom:1px solid var(--linie);overflow:visible}
+  .bestand{overflow:visible}
+  .admin-wrap{max-height:100vh;height:100vh;border-radius:0}
+}
+@media(max-width:420px){.liste{grid-template-columns:1fr}.leiste input{min-width:0;flex:1}}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="#">
+    <svg viewBox="0 0 40 40" fill="none" stroke="#c9a45c" stroke-width="1.5"><path d="M20 3 L36 12 V28 L20 37 L4 28 V12 Z"/><path d="M14 27 V13 h7 a5 5 0 0 1 0 10 h-7"/></svg>
+    <div><b>PRESTIGE</b><small>AUTOHAUS</small></div>
+  </a>
+  <nav><a href="#fahrzeuge">Fahrzeuge</a><a href="#kontakt">Kontakt</a></nav>
+</header>
+
+<section class="hero">
+  <div class="eyebrow">Exklusive Automobile</div>
+  <h1>Fahrzeuge mit <em>Charakter</em> &amp; Klasse.</h1>
+  <p>Ausgewählte Premium-Fahrzeuge – sorgfältig geprüft und bereit für ihren neuen Besitzer.</p>
+  <svg class="silhouette" viewBox="0 0 600 200" fill="none" stroke="#c9a45c" stroke-width="2">
+    <path d="M20 150 Q30 120 80 112 L170 100 Q230 55 320 50 Q400 48 460 95 L540 108 Q585 116 588 150 Z"/>
+    <path d="M190 100 Q240 66 320 62 Q385 62 430 98 Z"/>
+    <circle cx="140" cy="152" r="32"/><circle cx="480" cy="152" r="32"/>
+    <line x1="0" y1="186" x2="600" y2="186" opacity=".5"/>
+  </svg>
+</section>
+
+<div class="leiste" id="fahrzeuge">
+  <h2>Unser Bestand <span id="anzahl"></span></h2>
+  <input class="feld" id="suche" type="text" placeholder="Fahrzeug suchen …" oninput="anzeigen()">
+  <select class="feld" id="sort" onchange="anzeigen()">
+    <option value="neu">Neueste zuerst</option>
+    <option value="auf">Preis aufsteigend</option>
+    <option value="ab">Preis absteigend</option>
+  </select>
+</div>
+
+<main><div class="liste" id="liste"></div></main>
+
+<footer id="kontakt">
+  <div>© Autohaus Prestige · Alle Preise inkl. MwSt.</div>
+  <div>Musterstraße 1 · 46535 Dinslaken · Tel. 02064 / 000000</div>
+</footer>
+
+<!-- Passwortabfrage (nur über Tastenkombination erreichbar) -->
+<div class="overlay" id="loginOverlay">
+  <form class="login" id="loginBox" onsubmit="login(event)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#c9a45c" stroke-width="1.5"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+    <h3>Verwaltung</h3>
+    <p>Bitte Passwort eingeben</p>
+    <input class="feld" type="password" id="passwort" placeholder="••••••••" autocomplete="current-password">
+    <div class="fehler" id="fehler"></div>
+    <div style="display:flex;gap:10px">
+      <button type="button" class="btn zweit" style="flex:1" onclick="loginSchliessen()">Abbrechen</button>
+      <button type="submit" class="btn" style="flex:1">Anmelden</button>
+    </div>
+  </form>
+</div>
+
+<!-- Admin-Bereich -->
+<div class="overlay" id="admin">
+  <div class="admin-wrap">
+    <div class="admin-kopf">
+      <h3><span>Autohaus Prestige</span>Fahrzeugverwaltung</h3>
+      <div style="display:flex;gap:8px">
+        <button class="btn zweit klein" onclick="adminSchliessen()">Zur Website</button>
+        <button class="btn rot klein" onclick="abmelden()">Abmelden</button>
+      </div>
+    </div>
+    <div class="admin-body">
+      <form class="formular" id="formular" onsubmit="speichern(event)">
+        <h4 id="formTitel">Neues Fahrzeug einstellen</h4>
+        <label>Fahrzeugname</label>
+        <input class="feld" id="fName" type="text" placeholder="z. B. Porsche 911 Carrera S" required>
+        <label>Verkaufspreis (€)</label>
+        <input class="feld" id="fPreis" type="number" min="0" step="1" placeholder="z. B. 139500" required>
+        <label>Bild</label>
+        <div class="upload" id="upload" onclick="document.getElementById('fBild').click()">
+          <span id="uploadText">📷 Bild auswählen oder hierher ziehen</span>
+          <img id="vorschau" alt="">
+        </div>
+        <input type="file" id="fBild" accept="image/*" hidden onchange="bildLaden(this.files[0])">
+        <div class="knoepfe">
+          <button type="button" class="btn zweit" onclick="formReset()">Leeren</button>
+          <button type="submit" class="btn" id="speichernBtn">Online stellen</button>
+        </div>
+        <p class="hinweis">Öffnen der Verwaltung: <b>Shift + A</b></p>
+      </form>
+      <div class="bestand">
+        <h4>Online gestellte Fahrzeuge (<span id="adminAnzahl">0</span>)</h4>
+        <div id="adminListe"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================= EINSTELLUNGEN ================= */
+const KEY = "prestige_fahrzeuge_v3";
+const PASSWORT = "prestige"; // <- hier das Passwort ändern
+
+/* ================= BEISPIELDATEN ================= */
+function platzhalter(c1, c2){
+  return "data:image/svg+xml," + encodeURIComponent(
+`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 500'>
+<defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='${c1}'/><stop offset='1' stop-color='${c2}'/></linearGradient>
+<radialGradient id='l' cx='.5' cy='.35' r='.6'><stop offset='0' stop-color='#fff' stop-opacity='.18'/><stop offset='1' stop-color='#fff' stop-opacity='0'/></radialGradient></defs>
+<rect width='800' height='500' fill='url(#g)'/><rect width='800' height='500' fill='url(#l)'/>
+<ellipse cx='400' cy='395' rx='330' ry='18' fill='#000' opacity='.45'/>
+<path d='M90 360 Q100 315 170 302 L290 285 Q360 220 470 214 Q560 212 630 275 L700 290 Q735 298 738 360 Z' fill='#0c0c0e'/>
+<path d='M310 284 Q370 236 470 230 Q545 230 595 280 Z' fill='#2a2c33'/>
+<path d='M120 330 L730 330' stroke='#c9a45c' stroke-width='2' opacity='.5'/>
+<circle cx='235' cy='362' r='42' fill='#111'/><circle cx='235' cy='362' r='24' fill='#555'/>
+<circle cx='615' cy='362' r='42' fill='#111'/><circle cx='615' cy='362' r='24' fill='#555'/>
+</svg>`);
+}
+const BEISPIELE = [
+  {id:3, name:"Mercedes-Benz S 580 4MATIC", preis:124900, bild:platzhalter("#1c2a3d","#0b0f16")},
+  {id:2, name:"Porsche 911 Carrera S",      preis:139500, bild:platzhalter("#4a1414","#140606")},
+  {id:1, name:"BMW M4 Competition",          preis:79900,  bild:platzhalter("#1f3a2d","#08140f")},
+];
+
+let fahrzeuge = laden();
+let neuesBild = "";
+let bearbeitenId = null;
+
+function laden(){
+  try { const d = JSON.parse(localStorage.getItem(KEY)); if (Array.isArray(d)) return d; } catch(e){}
+  return BEISPIELE.slice();
+}
+function sichern(){
+  try { localStorage.setItem(KEY, JSON.stringify(fahrzeuge)); return true; }
+  catch(e){ toast("Speicher voll – bitte kleinere Bilder verwenden."); return false; }
+}
+
+/* ================= ÖFFENTLICHE ANSICHT ================= */
+const euro = n => Number(n).toLocaleString("de-DE") + " €";
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+function sortiert(liste){
+  const s = document.getElementById("sort").value;
+  const l = liste.slice();
+  if (s==="neu") l.sort((a,b)=>b.id-a.id);
+  if (s==="auf") l.sort((a,b)=>a.preis-b.preis);
+  if (s==="ab")  l.sort((a,b)=>b.preis-a.preis);
+  return l;
+}
+function anzeigen(){
+  const q = document.getElementById("suche").value.toLowerCase().trim();
+  const l = sortiert(fahrzeuge.filter(f => f.name.toLowerCase().includes(q)));
+  document.getElementById("anzahl").textContent = l.length + (l.length===1 ? " Fahrzeug" : " Fahrzeuge");
+  const el = document.getElementById("liste");
+  if (!l.length){ el.innerHTML = `<div class="leer">${fahrzeuge.length ? "Keine passenden Fahrzeuge gefunden." : "Aktuell sind keine Fahrzeuge eingestellt."}</div>`; return; }
+  el.innerHTML = l.map(f => `
+    <article class="karte">
+      <div class="bildbox"><img src="${f.bild}" alt="${esc(f.name)}" loading="lazy"></div>
+      <div class="info">
+        <div class="name">${esc(f.name)}</div>
+        <div class="preis"><b>${euro(f.preis)}</b><small>VERKAUFSPREIS</small></div>
+      </div>
+    </article>`).join("");
+}
+
+/* ================= TASTENKOMBINATION ================= */
+document.addEventListener("keydown", e => {
+  if ((e.shiftKey) && e.key.toLowerCase() === "a"){
+    e.preventDefault();
+    sessionStorage.getItem("prestige_admin") === "1" ? adminOeffnen() : loginOeffnen();
+  }
+  if (e.key === "Escape"){ loginSchliessen(); }
+});
+// Alternative für Handy/Tablet: Seite mit #verwaltung am Ende der Adresse aufrufen
+function hashPruefen(){ if (location.hash === "#verwaltung"){ history.replaceState(null,"",location.pathname); loginOeffnen(); } }
+window.addEventListener("hashchange", hashPruefen);
+
+/* ================= LOGIN ================= */
+function loginOeffnen(){
+  if (sessionStorage.getItem("prestige_admin") === "1") return adminOeffnen();
+  document.getElementById("loginOverlay").classList.add("offen");
+  document.getElementById("fehler").textContent = "";
+  setTimeout(()=>document.getElementById("passwort").focus(), 50);
+}
+function loginSchliessen(){
+  document.getElementById("loginOverlay").classList.remove("offen");
+  document.getElementById("passwort").value = "";
+}
+function login(e){
+  e.preventDefault();
+  const ok = document.getElementById("passwort").value === PASSWORT;
+  if (ok){
+    sessionStorage.setItem("prestige_admin","1");
+    loginSchliessen(); adminOeffnen(); toast("Willkommen in der Verwaltung");
+  } else {
+    const box = document.getElementById("loginBox");
+    document.getElementById("fehler").textContent = "Falsches Passwort";
+    box.classList.remove("schuetteln"); void box.offsetWidth; box.classList.add("schuetteln");
+    document.getElementById("passwort").select();
+  }
+}
+function abmelden(){
+  sessionStorage.removeItem("prestige_admin");
+  adminSchliessen(); toast("Abgemeldet");
+}
+
+/* ================= ADMIN ================= */
+function adminOeffnen(){
+  if (sessionStorage.getItem("prestige_admin") !== "1") return loginOeffnen();
+  adminListe();
+  document.getElementById("admin").classList.add("offen");
+}
+function adminSchliessen(){ document.getElementById("admin").classList.remove("offen"); formReset(); }
+
+function adminListe(){
+  const l = fahrzeuge.slice().sort((a,b)=>b.id-a.id);
+  document.getElementById("adminAnzahl").textContent = l.length;
+  document.getElementById("adminListe").innerHTML = l.length ? l.map(f => `
+    <div class="zeile">
+      <img src="${f.bild}" alt="">
+      <div class="t"><div>${esc(f.name)}</div><small>${euro(f.preis)}</small></div>
+      <div class="a">
+        <button class="btn zweit klein" onclick="bearbeiten(${f.id})">Bearbeiten</button>
+        <button class="btn rot klein" onclick="loeschen(${f.id})">Entfernen</button>
+      </div>
+    </div>`).join("") : '<div class="leer">Noch keine Fahrzeuge online.</div>';
+}
+
+function bildLaden(file){
+  if (!file || !file.type.startsWith("image/")) return;
+  const r = new FileReader();
+  r.onload = ev => {
+    const img = new Image();
+    img.onload = () => {
+      const max = 1000, sc = Math.min(1, max / img.width);
+      const c = document.createElement("canvas");
+      c.width = Math.round(img.width*sc); c.height = Math.round(img.height*sc);
+      c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+      neuesBild = c.toDataURL("image/jpeg", 0.8);
+      vorschauZeigen(neuesBild);
+    };
+    img.src = ev.target.result;
+  };
+  r.readAsDataURL(file);
+}
+function vorschauZeigen(src){
+  const v = document.getElementById("vorschau");
+  v.src = src; v.style.display = src ? "block" : "none";
+  document.getElementById("uploadText").textContent = src ? "Anderes Bild wählen" : "📷 Bild auswählen oder hierher ziehen";
+}
+// Drag & Drop
+const up = document.getElementById("upload");
+["dragenter","dragover"].forEach(t=>up.addEventListener(t,e=>{e.preventDefault();up.classList.add("drag")}));
+["dragleave","drop"].forEach(t=>up.addEventListener(t,e=>{e.preventDefault();up.classList.remove("drag")}));
+up.addEventListener("drop", e => bildLaden(e.dataTransfer.files[0]));
+
+function speichern(e){
+  e.preventDefault();
+  const name = document.getElementById("fName").value.trim();
+  const preis = Math.round(Number(document.getElementById("fPreis").value));
+  if (!name) return;
+  if (bearbeitenId){
+    const f = fahrzeuge.find(x=>x.id===bearbeitenId);
+    f.name = name; f.preis = preis; if (neuesBild) f.bild = neuesBild;
+    toast("Fahrzeug aktualisiert");
+  } else {
+    if (!neuesBild){ toast("Bitte ein Bild auswählen"); return; }
+    fahrzeuge.push({id:Date.now(), name, preis, bild:neuesBild});
+    toast("Fahrzeug ist jetzt online");
+  }
+  sichern(); formReset(); adminListe(); anzeigen();
+}
+function bearbeiten(id){
+  const f = fahrzeuge.find(x=>x.id===id); if (!f) return;
+  bearbeitenId = id; neuesBild = "";
+  document.getElementById("fName").value = f.name;
+  document.getElementById("fPreis").value = f.preis;
+  vorschauZeigen(f.bild);
+  document.getElementById("formTitel").textContent = "Fahrzeug bearbeiten";
+  document.getElementById("speichernBtn").textContent = "Änderungen speichern";
+  document.getElementById("fName").focus();
+}
+function loeschen(id){
+  if (!confirm("Fahrzeug wirklich entfernen?")) return;
+  fahrzeuge = fahrzeuge.filter(f=>f.id!==id);
+  if (bearbeitenId===id) formReset();
+  sichern(); adminListe(); anzeigen(); toast("Fahrzeug entfernt");
+}
+function formReset(){
+  document.getElementById("formular").reset();
+  document.getElementById("fBild").value = "";
+  neuesBild = ""; bearbeitenId = null; vorschauZeigen("");
+  document.getElementById("formTitel").textContent = "Neues Fahrzeug einstellen";
+  document.getElementById("speichernBtn").textContent = "Online stellen";
+}
+
+let tt;
+function toast(t){
+  const el = document.getElementById("toast");
+  el.textContent = t; el.classList.add("zeigen");
+  clearTimeout(tt); tt = setTimeout(()=>el.classList.remove("zeigen"), 2400);
+}
+
+/* ================= START ================= */
+anzeigen();
+hashPruefen();
+</script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a5800178add4dba7',t:'MTc5NDI2MDczOQ=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a5800178add4dba7',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
